@@ -151,7 +151,7 @@ let invokeStep
 let generate events parsers (scenario,lines) =
     fun () ->
         /// Type instance provider
-        let provider = ServiceProvider()
+        use provider = new ServiceProvider()
         let beforeScenarioEvents, afterScenarioEvents, beforeStepEvents, afterStepEvents = events
         /// Invokes events
         let invokeEvents events = 

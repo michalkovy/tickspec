@@ -39,6 +39,7 @@ let defineCons
 
     // Emit provider field
     gen.Emit(OpCodes.Ldarg_0)
+    //Fix: we should call Dispose once ServiceProvider is stopped to be used 
     let ctor = typeof<ServiceProvider>.GetConstructor([||])
     gen.Emit(OpCodes.Newobj,ctor)
     gen.Emit(OpCodes.Stfld,providerField)
