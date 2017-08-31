@@ -39,7 +39,6 @@ let defineCons
 
     // Emit provider field
     gen.Emit(OpCodes.Ldarg_0)
-    //Fix: we should call Dispose once ServiceProvider is stopped to be used 
     let ctor = typeof<ServiceProvider>.GetConstructor([||])
     gen.Emit(OpCodes.Newobj,ctor)
     gen.Emit(OpCodes.Stfld,providerField)
@@ -459,7 +458,8 @@ let defineRunMethod
                 emitInstance gen providerField mi.DeclaringType
                 gen.EmitCall(OpCodes.Callvirt, mi, null)
         )
-
+    
+    let exitTop = gen.BeginExceptionBlock()
     beforeScenarioEvents |> emitEvents
     let exit = gen.BeginExceptionBlock()
     // Execute steps
@@ -476,6 +476,12 @@ let defineRunMethod
     gen.Emit(OpCodes.Leave_S, exit)
     gen.BeginFinallyBlock()
     afterScenarioEvents |> emitEvents
+    gen.EndExceptionBlock()
+    gen.Emit(OpCodes.Leave_S, exitTop)
+    gen.BeginFinallyBlock()
+    gen.Emit(OpCodes.Ldarg_0)
+    gen.Emit(OpCodes.Ldfld,providerField)
+    gen.Emit(OpCodes.Callvirt, typeof<IDisposable>.GetMethod("Dispose") )
     gen.EndExceptionBlock()
     // Emit return
     gen.Emit(OpCodes.Ret)
