@@ -8,6 +8,6 @@ do  let ass = Assembly.GetExecutingAssembly()
 
     [@"Feature.txt"]
     |> Seq.iter (fun source ->
-        let s = ass.GetManifestResourceStream(source)
+        let s = ass.GetManifestResourceStream("FSharp."+source)
         definitions.Execute(source,s)
     )
