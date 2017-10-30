@@ -11,11 +11,7 @@ open TickSpec.ScenarioGen
 type internal FeatureGen(featureName:string,documentUrl:string) =
     let assemblyName = "Feature"
     /// Feature dynamic assembly
-    let assemblyBuilder =
-        AppDomain.CurrentDomain
-            .DefineDynamicAssembly(
-                AssemblyName(assemblyName),
-                AssemblyBuilderAccess.Run)
+    let assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(AssemblyName(assemblyName), AssemblyBuilderAccess.Run)
     /// Set assembly debuggable attribute
     do  let debuggableAttribute =
             let ctor = 
@@ -28,10 +24,9 @@ type internal FeatureGen(featureName:string,documentUrl:string) =
         assemblyBuilder.SetCustomAttribute debuggableAttribute
     /// Feature dynamic module
     let module_ = 
-        assemblyBuilder.DefineDynamicModule
-            (featureName+".dll", true)
+        assemblyBuilder.DefineDynamicModule(featureName+".dll")
     /// Feature source document
-    let doc = module_.DefineDocument(documentUrl, Guid.Empty, Guid.Empty, Guid.Empty) 
+    //todo: put back: let doc = module_.DefineDocument(documentUrl, Guid.Empty, Guid.Empty, Guid.Empty) 
     /// Assembly of generated feature
     member this.Assembly = assemblyBuilder :> Assembly
     /// Generates scenario type from lines
@@ -41,4 +36,4 @@ type internal FeatureGen(featureName:string,documentUrl:string) =
         (scenarioName,
          lines:(LineSource * MethodInfo * string[]) [], 
          parameters:(string * string)[]) =
-        generateScenario module_ doc events parsers (scenarioName,lines,parameters)
+        generateScenario module_ events parsers (scenarioName,lines,parameters) //todo: put back: doc

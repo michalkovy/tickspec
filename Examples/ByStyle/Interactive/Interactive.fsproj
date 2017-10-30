@@ -54,11 +54,6 @@
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Numerics" />
-    <ProjectReference Include="..\..\..\TickSpec\TickSpec.fsproj">
-      <Name>TickSpec</Name>
-      <Project>{97bf4912-2b4e-410b-9b63-5e07076514a9}</Project>
-      <Private>True</Private>
-    </ProjectReference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.

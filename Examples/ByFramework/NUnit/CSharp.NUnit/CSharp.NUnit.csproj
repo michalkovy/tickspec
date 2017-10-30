@@ -52,12 +52,6 @@
       <LastGenOutput>Stock.feature.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\TickSpec\TickSpec.fsproj">
-      <Project>{97bf4912-2b4e-410b-9b63-5e07076514a9}</Project>
-      <Name>TickSpec</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -316,7 +316,7 @@ let emitArgument
         
 /// Defines step method
 let defineStepMethod
-        doc
+        //todo: put back: doc
         (scenarioBuilder:TypeBuilder)
         (providerField:FieldBuilder)
         (parsers:IDictionary<Type,MethodInfo>)
@@ -332,7 +332,7 @@ let defineStepMethod
     /// Step method ILGenerator
     let gen = stepMethod.GetILGenerator()
     // Set marker in source document    
-    gen.MarkSequencePoint(doc,n,1,n,line.Text.Length+1)
+    //todo: put back: gen.MarkSequencePoint(doc,n,1,n,line.Text.Length+1)
     // Handle generic methods
     let mi =
         if mi.ContainsGenericParameters then
@@ -482,7 +482,7 @@ let defineRunMethod
 /// Generates Type for specified Scenario
 let generateScenario
         (module_:ModuleBuilder)
-        doc
+        //todo: put back: doc
         events
         (parsers:IDictionary<Type,MethodInfo>)
         (scenarioName,lines:(LineSource * MethodInfo * string[]) [],
@@ -498,8 +498,8 @@ let generateScenario
     /// Scenario step methods
     let stepMethods =
         lines 
-        |> Array.map (defineStepMethod doc scenarioBuilder providerField parsers)
+        |> Array.map (defineStepMethod scenarioBuilder providerField parsers) //todo: put back: doc
         
     defineRunMethod scenarioBuilder providerField events stepMethods
     /// Return scenario
-    scenarioBuilder.CreateType()
+    scenarioBuilder.CreateTypeInfo()

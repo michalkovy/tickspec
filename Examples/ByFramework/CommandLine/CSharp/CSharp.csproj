@@ -65,12 +65,6 @@
     <Compile Include="StockItem.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\TickSpec\TickSpec.fsproj">
-      <Project>{97BF4912-2B4E-410B-9B63-5E07076514A9}</Project>
-      <Name>TickSpec</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Feature.txt" />
   </ItemGroup>
   <ItemGroup>

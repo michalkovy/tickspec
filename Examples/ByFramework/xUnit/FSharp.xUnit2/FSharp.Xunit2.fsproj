@@ -48,13 +48,20 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5.2')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v3.5' Or $(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5.2')">
       <PropertyGroup>
         <__paket__xunit_runner_visualstudio_props>net20\xunit.runner.visualstudio</__paket__xunit_runner_visualstudio_props>
       </PropertyGroup>
     </When>
   </Choose>
   <Import Project="..\..\..\..\packages\xunit.runner.visualstudio.2.3.1\build\$(__paket__xunit_runner_visualstudio_props).props" Condition="Exists('..\..\..\..\packages\xunit.runner.visualstudio.2.3.1\build\$(__paket__xunit_runner_visualstudio_props).props')" Label="Paket" />
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v2.0'">
+      <PropertyGroup>
+        <__paket__NETStandard_Library_targets>netstandard2.0\NETStandard.Library</__paket__NETStandard_Library_targets>
+      </PropertyGroup>
+    </When>
+  </Choose>
   <ItemGroup>
     <None Include="paket.references" />
     <Compile Include="TickScenarios.fs" />
@@ -66,13 +73,6 @@
     <Compile Include="CalculatorSteps.fs" />
     <Compile Include="Features.fs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\TickSpec\TickSpec.fsproj">
-      <Name>TickSpec</Name>
-      <Project>{97bf4912-2b4e-410b-9b63-5e07076514a9}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5.2'">
       <ItemGroup>
@@ -83,9 +83,18 @@
         </Reference>
       </ItemGroup>
     </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v2.0'">
+      <ItemGroup>
+        <Reference Include="xunit.abstractions">
+          <HintPath>..\..\..\..\packages\xunit.abstractions\lib\netstandard1.0\xunit.abstractions.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5.2'">
+    <When Condition="($(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5.2') Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v2.0')">
       <ItemGroup>
         <Reference Include="xunit.assert">
           <HintPath>..\..\..\..\packages\xunit.assert\lib\netstandard1.1\xunit.assert.dll</HintPath>
@@ -96,7 +105,7 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5.2'">
+    <When Condition="($(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5.2') Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v2.0')">
       <ItemGroup>
         <Reference Include="xunit.core">
           <HintPath>..\..\..\..\packages\xunit.extensibility.core\lib\netstandard1.1\xunit.core.dll</HintPath>
@@ -116,6 +125,16 @@
         </Reference>
       </ItemGroup>
     </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v2.0'">
+      <ItemGroup>
+        <Reference Include="xunit.execution.dotnet">
+          <HintPath>..\..\..\..\packages\xunit.extensibility.execution\lib\netstandard1.1\xunit.execution.dotnet.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
   </Choose>
+  <Import Project="..\..\..\..\packages\NETStandard.Library\build\$(__paket__NETStandard_Library_targets).targets" Condition="Exists('..\..\..\..\packages\NETStandard.Library\build\$(__paket__NETStandard_Library_targets).targets')" Label="Paket" />
   <Import Project="..\..\..\..\packages\xunit.core\build\xunit.core.targets" Condition="Exists('..\..\..\..\packages\xunit.core\build\xunit.core.targets')" Label="Paket" />
 </Project>
