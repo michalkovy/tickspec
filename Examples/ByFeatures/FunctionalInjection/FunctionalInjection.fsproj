@@ -71,6 +71,7 @@
     <EmbeddedResource Include="Stock.feature" />
     <Compile Include="StockItem.fs" />
     <Compile Include="StockStepDefinitions.fs" />
+    <None Include="Advanced.feature" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
