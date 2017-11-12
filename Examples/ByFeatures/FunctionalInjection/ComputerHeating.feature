@@ -1,9 +1,8 @@
-﻿Feature: Advanced
+﻿Feature: Computer heating
 
 Scenario: Computer and temperature
-Given standard room with temperature 10 degrees
+Given room with temperature 10 degrees
 When computer is started in the room
 And computer runs for 10 minutes
 Then computer is on login screen
 And room temperature is 11 degrees
-
