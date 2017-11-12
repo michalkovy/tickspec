@@ -4,6 +4,7 @@ open System
 open System.Collections.Generic
 open System.Diagnostics
 open System.Reflection
+open Microsoft.FSharp.Reflection
 
 /// Provides an instance provider for tests
 type IInstanceProvider =
@@ -75,16 +76,22 @@ type ServiceProvider () as self =
 
     interface IInstanceProvider with
         member this.RegisterInstance (t: Type) (instance: obj) =
-            match instances.TryGetValue t with
-            | true, value ->
-                match value with
-                | :? IDisposable as d -> d.Dispose()
-                | _ -> ()
+            if FSharpType.IsTuple t then
+                let types = FSharpType.GetTupleElements t
+                let values = FSharpValue.GetTupleFields instance
+                Seq.map2 (fun t v -> t,v) types values
+                |> Seq.iter (fun (t,v) -> (this :> IInstanceProvider).RegisterInstance t v)
+            else
+                match instances.TryGetValue t with
+                | true, value ->
+                    match value with
+                    | :? IDisposable as d -> d.Dispose()
+                    | _ -> ()
+
+                    instances.[t] <- instance
+                | _ -> instances.Add(t, instance)
 
                 instances.[t] <- instance
-            | _ -> instances.Add(t, instance)
-
-            instances.[t] <- instance
 
     interface IServiceProvider with
         [<DebuggerStepThrough>]
