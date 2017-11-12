@@ -3,10 +3,10 @@
 open TickSpec
 open NUnit.Framework
 
-type RoomTemperature = RoomTemperature of int
+type RoomTemperature = RoomTemperature of float
       
-let [<Given>] ``room with temperature (.*) degrees`` (n:int) =
-    RoomTemperature n
+let [<Given>] ``room with temperature (.*) degrees`` (f:float) =
+    RoomTemperature f
 
-let [<Then>] ``room temperature is (.*) degrees`` (n:int) (RoomTemperature t) =
-    Assert.AreEqual(n, t)
+let [<Then>] ``room temperature is (.*) degrees`` (f:float) (RoomTemperature ct) =
+    Assert.AreEqual(f, ct)
