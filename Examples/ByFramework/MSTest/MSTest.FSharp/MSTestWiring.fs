@@ -1,4 +1,4 @@
-﻿module NUnit.TickSpec
+﻿module Microsoft.VisualStudio.TestTools.UnitTesting.TickSpec
 
 open TickSpec
 open Microsoft.VisualStudio.TestTools.UnitTesting

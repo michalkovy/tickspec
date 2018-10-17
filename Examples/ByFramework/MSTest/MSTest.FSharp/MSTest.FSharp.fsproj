@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="paket.references" />
-    <Compile Include="FeatureFixture.fs" />
+    <Compile Include="MSTestWiring.fs" />
     <Compile Include="StockItem.fs" />
     <EmbeddedResource Include="Stock.feature" />
     <Compile Include="StockSteps.fs" />
