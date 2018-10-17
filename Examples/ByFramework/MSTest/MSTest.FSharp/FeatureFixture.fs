@@ -10,6 +10,8 @@ open System.Runtime.ExceptionServices
 [<TestClass>]
 type FeatureFixture () =
     /// Test method for all BDD tests in current assembly as MSTest unit tests.
+    /// Today MSTest shows all scenarios as one test. RFC exists to improve it:
+    /// https://github.com/Microsoft/testfx-docs/pull/52
     [<TestMethod>]
     [<DynamicData("Scenarios")>]
     member __.BddTestScenarios (scenario:Scenario) =
