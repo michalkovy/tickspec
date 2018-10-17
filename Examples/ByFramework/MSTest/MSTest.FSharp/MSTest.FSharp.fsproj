@@ -9,7 +9,6 @@
     <Compile Include="StockItem.fs" />
     <EmbeddedResource Include="Stock.feature" />
     <Compile Include="StockSteps.fs" />
-    <Compile Include="Tests.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\TickSpec\TickSpec.fsproj">

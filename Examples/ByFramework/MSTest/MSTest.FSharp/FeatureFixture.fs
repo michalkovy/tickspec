@@ -6,13 +6,13 @@ open Microsoft.VisualStudio.TestTools.UnitTesting
 open System.Reflection
 open System.Runtime.ExceptionServices
 
-/// Class containing all BDD tests in current assembly as NUnit unit tests
+/// Class containing all BDD tests in current assembly as MSTest unit tests
 [<TestClass>]
 type FeatureFixture () =
-    /// Test method for all BDD tests in current assembly as NUnit unit tests
+    /// Test method for all BDD tests in current assembly as MSTest unit tests.
     [<TestMethod>]
     [<DynamicData("Scenarios")>]
-    member __.Bdd (scenario:Scenario) =
+    member __.BddTestScenarios (scenario:Scenario) =
         if scenario.Tags |> Seq.exists ((=) "ignore") then
             Assert.Inconclusive("Ignored: " + scenario.ToString())
         try
