@@ -46,6 +46,15 @@ module Test =
                 projects
                 |> Seq.iter (fun (p:string) -> 
                     DotNet.test (fun o -> {o with Configuration = DotNet.BuildConfiguration.Release; NoBuild = true}) p)
+    
+    module MSTest = 
+        ()
+        let projects () = Analysis.findAssembliesReferencing "MSTest.TestFramework"
+        let run projects = 
+            projects
+            |> Seq.iter (fun p -> DotNet.test (fun o -> 
+                {o with Configuration = DotNet.BuildConfiguration.Release; NoBuild = true;
+                        Framework = if Environment.isWindows then None else Some "netcoreapp2.1"}) p)
 
 open AppVeyor
 open Test
@@ -90,6 +99,7 @@ Target.create "Build" (fun _ ->
 Target.create "Test" (fun _ ->
     NUnit.projects () |> NUnit.run
     XUnit.projects () |> XUnit.run
+    MSTest.projects () |> MSTest.run
 )
 
 Target.create "Nuget" (fun _ ->
