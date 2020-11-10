@@ -1,4 +1,3 @@
-open Fake.Core.CommandLineParsing
 #r "paket:
     nuget NUnit.ConsoleRunner
     nuget xunit.runner.console
@@ -46,7 +45,7 @@ module Analysis =
         let pRefs = 
             projDoc 
             |> Xml.descendants packageRefName
-            |> Seq.filter (fun x -> x.Attribute(includeName) <> null)
+            |> Seq.filter (fun x -> not (isNull (x.Attribute(includeName))))
             |> Seq.map (fun x -> x.Attribute(includeName).Value)
         
         if pRefs |> Seq.contains packageName then Some project
@@ -130,31 +129,36 @@ Target.create "Nuget" (fun _ ->
                     |> DotNet.Options.withCustomParams (Some props)
             } )
             "TickSpec\\TickSpec.fsproj"
+    else
+        Trace.tracef "--- Skipping Nuget target as the build is not running on Windows ---"   
 )
 
 Target.create "PublishNuget" (fun _ ->
-    match AppVeyor.NugetKey with
-    | Some k -> TraceSecrets.register k "<NUGET_KEY>"
-    | None -> ()
+    if Environment.isWindows then
+        match AppVeyor.NugetKey with
+        | Some k -> TraceSecrets.register k "<NUGET_KEY>"
+        | None -> ()
 
-    let publishNugets () =
-        let key = 
-            match AppVeyor.NugetKey with
-            | Some x -> x
-            | None -> failwith "To publish nuget, it is needed to set NUGET_KEY environment variable"        
+        let publishNugets () =
+            let key = 
+                match AppVeyor.NugetKey with
+                | Some x -> x
+                | None -> failwith "To publish nuget, it is needed to set NUGET_KEY environment variable"        
 
-        let publishNuget nuget =
-            DotNet.exec id "nuget" (sprintf "push %s -k %s -s https://api.nuget.org/v3/index.json" nuget key)
-    
-        !! (Build.nuget </> "*.nupkg")
-        -- (Build.nuget </> "*.symbols.nupkg")
-        |> Seq.map publishNuget
+            let publishNuget nuget =
+                DotNet.exec id "nuget" (sprintf "push %s -k %s -s https://api.nuget.org/v3/index.json" nuget key)
+        
+            !! (Build.nuget </> "*.nupkg")
+            -- (Build.nuget </> "*.symbols.nupkg")
+            |> Seq.map publishNuget
 
-    match AppVeyor.Tag with
-    | None -> ()
-    | Some t when t = ReleaseNotes.TickSpec.NugetVersion ->
-        publishNugets () |> Seq.iter (fun x -> if not x.OK then failwithf "Nuget publish failed with %A" x)
-    | Some t -> failwithf "Unexpected tag %s" t
+        match AppVeyor.Tag with
+        | None -> ()
+        | Some t when t = ReleaseNotes.TickSpec.NugetVersion ->
+            publishNugets () |> Seq.iter (fun x -> if not x.OK then failwithf "Nuget publish failed with %A" x)
+        | Some t -> failwithf "Unexpected tag %s" t
+    else
+        Trace.tracef "--- Skipping PublishNuget target as the build is not running on Windows ---"   
 )
 
 Target.create "All" ignore
